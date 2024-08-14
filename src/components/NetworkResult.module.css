@@ -1,0 +1,36 @@
+.mainContainer{
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+.leftContainer{
+  width: 70%;
+}
+.rightContainer{
+  width: 25%;
+  margin-left: 10px;
+  border-radius: 5px;
+  border: 1px solid black;
+  padding: 10px;
+}
+
+.cytoscape__container{
+  border: 1px solid black;
+  border-radius: 5px;
+  /* background-color: #f5f6fe; */
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.styleSetting{
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: 10px;
+  margin-top: 20px;
+}
+.styleSetting p{
+  margin-left: 30px;
+}

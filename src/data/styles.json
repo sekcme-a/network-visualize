@@ -1,0 +1,199 @@
+[{
+    "selector" : "node",
+    "css" : {
+      "label" : "data(label)",
+      "border-opacity" : 1.0,
+      "background-opacity" : 1.0,
+      "text-opacity" : 1.0,
+      "width" : 45.0,
+      "text-valign" : "center",
+      "text-halign" : "center",
+      "color" : "black",
+      "font-family" : "SansSerif.plain",
+      "font-weight" : "normal",
+      "background-color" : "rgb(192,192,192)",
+      "border-color" : "rgb(204,204,204)",
+      "shape" : "ellipse",
+      "height" : 45.0,
+      "font-size" : 12,
+      "border-width" : 0.0
+    }
+  }, 
+  {
+    "selector" : "node:selected",
+    "css" : {
+      "background-color" : "rgb(234, 111, 247)"
+    }
+  }, {
+    "selector" : "edge",
+    "css" : {
+      "text-opacity" : 1.0,
+      "target-arrow-shape" : "none",
+      "target-arrow-color" : "rgb(0,0,0)",
+      "content" : "",
+      "width" : 2.0,
+      "font-family" : "Dialog.plain",
+      "font-weight" : "normal",
+      "line-color" : "rgb(31,41,61)",
+      "font-size" : 10,
+      "opacity" : 1.0,
+      "color" : "rgb(0,0,0)",
+      "line-style" : "solid",
+      "source-arrow-shape" : "none",
+      "source-arrow-color" : "rgb(0,0,0)"
+    }
+  }, 
+  {
+    "selector" : "edge[type = 2]",
+    "css" : {
+      "width": 12
+    }
+  }, 
+  {
+    "selector" : "edge[combined_score > 1]",
+    "css" : {
+      "width" : 6.0
+    }
+  }, 
+  {
+    "selector" : "edge[combined_score = 1]",
+    "css" : {
+      "width" : 5.0
+    }
+  }, {
+    "selector" : "edge[combined_score > 0.9][combined_score < 1]",
+    "css" : {
+      "width" : 5.0
+    }
+  }, {
+    "selector" : "edge[combined_score = 0.9]",
+    "css" : {
+      "width" : 5.0
+    }
+  },{
+    "selector" : "edge[combined_score > 0.8][combined_score < 0.9]",
+    "css" : {
+      "width" : 4.0
+    }
+  }, {
+    "selector" : "edge[combined_score = 0.9]",
+    "css" : {
+      "width" : 4.0
+    }
+  }, {
+    "selector" : "edge[combined_score > 0.7][combined_score < 0.8]",
+    "css" : {
+      "width" : 3.0
+    }
+  }, {
+    "selector" : "edge[combined_score = 0.7]",
+    "css" : {
+      "width" : 3.0
+    }
+  },{
+    "selector" : "edge[combined_score > 0.6][combined_score < 0.7]",
+    "css" : {
+      "width" : 2.0
+    }
+  }, {
+    "selector" : "edge[combined_score = 0.6]",
+    "css" : {
+      "width" : 2.0
+    }
+  },{
+    "selector" : "edge[combined_score > 0.5][combined_score < 0.6]",
+    "css" : {
+      "width" : 1.5
+    }
+  }, {
+    "selector" : "edge[combined_score = 0.5]",
+    "css" : {
+      "width" : 1.5
+    }
+  },{
+    "selector" : "edge[combined_score > 0.4][combined_score < 0.5]",
+    "css" : {
+      "width" : 1.2
+    }
+  }, {
+    "selector" : "edge[combined_score = 0.4]",
+    "css" : {
+      "width" : 1.2
+    }
+  },{
+    "selector" : "edge[combined_score > 0.3][combined_score < 0.4]",
+    "css" : {
+      "width" : 1.0
+    }
+  }, {
+    "selector" : "edge[combined_score = 0.3]",
+    "css" : {
+      "width" : 1.0
+    }
+  },{
+    "selector" : "edge[combined_score < 0.3]",
+    "css" : {
+      "width" : 0.7
+    }
+  },{
+    "selector" : "edge[combined_score > 1]",
+    "css" : {
+      "opacity" : 0.1
+    }
+  }, {
+    "selector" : "edge[combined_score = 1]",
+    "css" : {
+      "opacity" : 0.1
+    }
+  }, {
+    "selector" : "edge[combined_score > 0.8][combined_score < 1]",
+    "css" : {
+      "opacity" : 0.8
+    }
+  }, {
+    "selector" : "edge[combined_score = 0.8]",
+    "css" : {
+      "opacity" : 0.8
+    }
+  },{
+    "selector" : "edge[combined_score > 0.6][combined_score < 0.8]",
+    "css" : {
+      "opacity" : 0.6
+    }
+  }, {
+    "selector" : "edge[combined_score = 0.6]",
+    "css" : {
+      "opacity" : 0.6
+    }
+  },{
+    "selector" : "edge[combined_score > 0.4][combined_score < 0.6]",
+    "css" : {
+      "opacity" : 0.4
+    }
+  }, {
+    "selector" : "edge[combined_score = 0.4]",
+    "css" : {
+      "opacity" : 0.4
+    }
+  },{
+    "selector" : "edge[combined_score > 0.2][combined_score < 0.4]",
+    "css" : {
+      "opacity" : 0.2
+    }
+  }, {
+    "selector" : "edge[combined_score = 0.2]",
+    "css" : {
+      "opacity" : 0.2
+    }
+  },{
+    "selector" : "edge[combined_score < 0.2]",
+    "css" : {
+      "opacity" : 0.13333333333333333
+    }
+  },
+  {
+    "selector" : "edge:selected",
+    "css" : {
+      "line-color" : "rgb(164, 0, 181)"
+    }
+} ]
