@@ -179,10 +179,20 @@ const Home = () => {
   return (
     <div>
       <h1>Biological Network Visualization</h1>
-      <input type="file" onChange={(e) => handleFileUpload(e, "interactions")} accept=".tsv" />
-      <input type="file" onChange={(e) => handleFileUpload(e, "annotations")} accept=".tsv" />
-
-      <button onClick={onVisualizeClick}>Visualize</button>
+      <div style={{display:"flex", marginTop: "20px"}}>
+        <h3 style={{marginRight:"20px"}}>Input Interactions</h3>
+        <input type="file" onChange={(e) => handleFileUpload(e, "interactions")} accept=".tsv" />
+      </div>
+      <div style={{display:"flex", marginTop: "20px"}}>
+        <h3 style={{marginRight:"20px"}}>Protein Annotations
+          <p style={{fontSize:"13px"}}>{`(Not required)`}</p>
+        </h3>
+        <input type="file" onChange={(e) => handleFileUpload(e, "annotations")} accept=".tsv" />
+      </div>
+    
+      <div style={{marginTop:"20px"}}>
+        <button onClick={onVisualizeClick}>Visualize</button>
+      </div>
       {/* {elements.length > 0 && <NetworkGraph elements={elements} />} */}
     </div>
   );

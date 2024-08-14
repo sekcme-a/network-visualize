@@ -216,7 +216,7 @@ const NetworkResult = ({ edges, nodes }) => {
           />
 
         </div>
-        <div style={{display:"flex", alignItems:"center", marginTop: "10px"}}>
+        {/* <div style={{display:"flex", alignItems:"center", marginTop: "10px"}}>
           <input
             type="radio"
             value="dbscan"
@@ -241,7 +241,7 @@ const NetworkResult = ({ edges, nodes }) => {
             label="parameter"
           />
 
-        </div>
+        </div> */}
 
       </div>
       {selectedType === "node" && <NodeInfo id={selectedId} data={{ nodes, edges }} />}
