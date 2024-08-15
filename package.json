@@ -2,9 +2,12 @@
   "name": "biological-network-visualization",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://sekcme-a.github.io/network-visualization",
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build && next export",
+    "predeploy": "npm run build",
+    "deploy": "touch out/.nojekyll && gh-pages -d out --dotfiles",
     "start": "next start",
     "lint": "next lint"
   },
@@ -18,6 +21,7 @@
     "cytoscape-dagre": "^2.5.0",
     "d3": "^7.9.0",
     "density-clustering": "^1.3.0",
+    "gh-pages": "^6.1.1",
     "k-means-clustering": "^0.8.7",
     "kmeans-js": "^0.1.2",
     "mcl": "^0.0.2",
