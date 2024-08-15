@@ -2,7 +2,7 @@
   "name": "biological-network-visualization",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://sekcme-a.github.io/network-visualization",
+  "homepage": "https://sekcme-a.github.io/network-vis",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
