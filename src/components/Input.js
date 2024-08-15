@@ -1,4 +1,5 @@
-"use client"
+'use client'
+
 
 import React, { useContext, useState } from 'react';
 import dynamic from 'next/dynamic';
@@ -7,7 +8,10 @@ import { MyContext } from '@/context/data';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
-const Home = () => {
+
+
+const Input = () => {
+
   const router = useRouter()
   const [elements, setElements] = useState([]);
 
@@ -174,13 +178,13 @@ const Home = () => {
     console.log(edgeList)
     console.log(updatedNodesWithSize)
 
-    router.push("/result")
+    // router.push("/result")
   }
 
-  return (
-    <div>
-      <h1>Biological Network Visualization</h1>
-      <div style={{display:"flex", marginTop: "20px"}}>
+  return(
+    <>
+
+<div style={{display:"flex", marginTop: "20px"}}>
         <h3 style={{marginRight:"20px"}}>Input Interactions</h3>
         <input type="file" onChange={(e) => handleFileUpload(e, "interactions")} accept=".tsv" />
       </div>
@@ -194,10 +198,8 @@ const Home = () => {
       <div style={{marginTop:"20px"}}>
         <button onClick={onVisualizeClick}>Visualize</button>
       </div>
-      {/* <Link href="/result">sdf</Link> */}
-      {/* {elements.length > 0 && <NetworkGraph elements={elements} />} */}
-    </div>
-  );
-};
+    </>
+  )
+}
 
-export default Home;
+export default Input
