@@ -1,11 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',
-  basePath:'/network-visualization'
-  // assetPrefix:
-  //   process.env.NODE_ENV === "production"
-  //     ? "https://sekcme-a.github.io/network-visualization"
-  //     : "",
+  output: "export",
+  basePath: "/network-visualization",
 };
 
-export default nextConfig;
+module.exports = nextConfig;
