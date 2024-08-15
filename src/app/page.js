@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 import { parseTsvData } from '@/utils/parsetTsv';
 import { MyContext } from '@/context/data';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 const Home = () => {
   const router = useRouter()
@@ -193,6 +194,7 @@ const Home = () => {
       <div style={{marginTop:"20px"}}>
         <button onClick={onVisualizeClick}>Visualize</button>
       </div>
+      <Link href="/result"><a>asdf</a></Link>
       {/* {elements.length > 0 && <NetworkGraph elements={elements} />} */}
     </div>
   );
