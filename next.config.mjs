@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: "export",
+  output:'export',
   basePath: "/network-visualization",
 };
-
-module.exports = nextConfig;
+/* module.exports = nextConfig*/
+export default nextConfig;
