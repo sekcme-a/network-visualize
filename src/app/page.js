@@ -7,18 +7,30 @@ import { MyContext } from '@/context/data';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import NetworkResult from '@/components/NetworkResult';
+import { useRef } from 'react';
 
 const Home = () => {
   const router = useRouter()
+  const fileInputRef = useRef()
+  const fileInputRef2 = useRef()
   const [elements, setElements] = useState([]);
 
   const [interactions, setInteractions] = useState([])
   const [annotations, setAnnotations] = useState([])
 
+  const [fileName, setFileName]= useState("")
+  const [fileName2, setFileName2] = useState("")
+
   const { nodes, setNodes, edges, setEdges } = useContext(MyContext)
 
   const handleFileUpload = (event, type) => {
     const file = event.target.files[0];
+    if (file) {
+      if(type==="interactions")
+        setFileName(file.name);  // Set the selected file's name in the state
+      else
+        setFileName2(file.name)
+    }
     const reader = new FileReader();
 
     reader.onload = (e) => {
@@ -175,27 +187,117 @@ const Home = () => {
     console.log(edgeList)
     console.log(updatedNodesWithSize)
 
-    router.push("/result")
+    router.push("/visualizeresult")
   }
 
-  return (
-    <div>
-      <h1>Biological Network Visualization</h1>
-      <div style={{display:"flex", marginTop: "20px"}}>
-        <h3 style={{marginRight:"20px"}}>Input Interactions</h3>
-        <input type="file" onChange={(e) => handleFileUpload(e, "interactions")} accept=".tsv" />
-      </div>
-      <div style={{display:"flex", marginTop: "20px"}}>
-        <h3 style={{marginRight:"20px"}}>Protein Annotations
-          <p style={{fontSize:"13px"}}>{`(Not required)`}</p>
-        </h3>
-        <input type="file" onChange={(e) => handleFileUpload(e, "annotations")} accept=".tsv" />
-      </div>
-    
-      <div style={{marginTop:"20px"}}>
-        <button onClick={onVisualizeClick}>Visualize</button>
-      </div>
+  const handleClick = () => {
+    fileInputRef.current.click();
+  };
+  const handleClick2 = () => {
+    fileInputRef2.current.click();
+  };
 
+  return (
+    <div style={{display:"flex", justifyContent:"center", alignItems:"center", width:"100vw", height:"100vh", backgroundColor:"rgb(36, 36, 36)", }}>
+      <div style={{width:"400px", height:"500px", backgroundColor:"white", borderRadius: 10, justifyContent:"center", alignItems:"center", display: "flex"}}>
+        <div>
+          <h3 style={{marginBottom:"20px", fontSize:"25px"}}>Network Visualization</h3>
+
+          <div style={{width:"100%"}}>
+            <h5 style={{marginBottom:"5px"}}>Input Interactions</h5>
+            {/* Hidden file input */}
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={(e) => handleFileUpload(e, "interactions")}
+              accept=".tsv"
+              style={{ display: 'none' }}
+            />
+            {/* Custom button to trigger file input */}
+            
+            <div style={{display:"flex", flexWrap:"wrap"}}>
+              <div style={{display:"flex", alignItems:"center", height: "30px", width:"170px", border: "1px solid rgb(200,200,200)", borderRadius: 5, padding: "5px"}}>
+                {fileName && (
+                  <p style={{ fontSize: "14px", color: "#333" }}>{fileName}</p>
+                )}
+              </div>
+              <button
+                onClick={handleClick}
+                style={{
+                  marginLeft:"10px", 
+                  padding: "10px 20px",
+                  borderRadius: "5px",
+                  border: "2px solid #ccc",
+                  backgroundColor: "#1700a9",
+                  color: "white",
+                  cursor: "pointer",
+                  fontSize: "14px",
+                }}
+              >
+                Upload File
+              </button>
+            </div>
+          </div>
+
+
+
+
+          <div style={{width:"100%", marginTop: "20px"}}>
+            <h5 style={{marginBottom:"5px"}}>Input Annotations <strong style={{fontWeight:"normal", fontSize:"11px"}}>{`(* Not required)`}</strong></h5>
+            {/* Hidden file input */}
+            <input
+              type="file"
+              ref={fileInputRef2}
+              onChange={(e) => handleFileUpload(e, "annotations")}
+              accept=".tsv"
+              style={{ display: 'none' }}
+            />
+            {/* Custom button to trigger file input */}
+            
+            <div style={{display:"flex", flexWrap:"wrap"}}>
+              <div style={{display:"flex", alignItems:"center", height: "30px", width:"170px", border: "1px solid rgb(200,200,200)", borderRadius: 5, padding: "5px"}}>
+                {fileName && (
+                  <p style={{ fontSize: "14px", color: "#333" }}>{fileName2}</p>
+                )}
+              </div>
+              <button
+                onClick={handleClick2}
+                style={{
+                  marginLeft:"10px", 
+                  padding: "10px 20px",
+                  borderRadius: "5px",
+                  border: "2px solid #ccc",
+                  backgroundColor: "#1700a9",
+                  color: "white",
+                  cursor: "pointer",
+                  fontSize: "14px",
+                }}
+              >
+                Upload File
+              </button>
+            </div>
+          </div>
+
+
+          <button
+            onClick={onVisualizeClick}
+            style={{
+              marginTop:"30px", 
+              padding: "10px 20px",
+              borderRadius: "10px",
+              width:"100%",
+              border: "2px solid #ccc",
+              backgroundColor: "#060056",
+              color: "white",
+              cursor: "pointer",
+              fontSize: "14px",
+            }}
+          >
+            Visualize
+          </button>
+
+        </div>
+      </div>
     </div>
   );
 };

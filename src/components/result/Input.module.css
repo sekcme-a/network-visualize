@@ -1,0 +1,26 @@
+
+.container{
+
+}
+
+
+
+.nodes{
+  border: 1px solid rgb(200,200,200);
+  border-radius: 10px;
+}
+
+.item{
+  padding: 10px 10px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid rgb(200,200,200);
+}
+.item h5{
+  font-size: 13px;
+  width: 80px;
+}
+.item p{
+  font-size: 10px;
+  width: 100%
+}

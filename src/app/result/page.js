@@ -15,6 +15,7 @@ const Result = () => {
 
     <>
     <h1>Biological Network Visualization</h1>
+    <p style={{marginTop:"5px"}}>Result for 11 nodes</p>
     {/* <Input /> */}
     {/* {edges?.length>0 && nodes?.length>0 && */}
       <NetworkResult {...{edges, nodes}} />

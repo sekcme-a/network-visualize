@@ -1,0 +1,9 @@
+.item{
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: space-between;
+  padding: 5px 0;
+  border-radius: 5px;
+  border: 1px solid rgb(200,200,200);
+}

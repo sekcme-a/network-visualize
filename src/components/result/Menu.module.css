@@ -1,0 +1,38 @@
+
+
+.container{
+  width: 70%;
+  height: 35px;
+  display: flex;
+  justify-content: center;
+  border: 1px solid rgb(144, 144, 144);
+  border-radius: 5px;
+  z-index: 1
+}
+
+.container .item{
+  width: 20%;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+
+}
+
+.container h4{
+  font-weight: normal;
+  margin-left: 4px;
+}
+
+
+.selected{
+  /* border-top: 1px solid rgb(190, 190, 190);
+  border-left: 1px solid rgb(190, 190, 190);
+  border-right: 1px solid rgb(190, 190, 190); */
+  /* background-color: rgb(238, 238, 238); */
+  /* border-top-right-radius: 5px;
+  border-top-left-radius: 5px; */
+
+  background-color: rgb(71, 71, 71);
+  color: white !important
+}

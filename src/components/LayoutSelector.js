@@ -57,7 +57,7 @@ const LayoutSelector = ({ layoutName, setLayoutName }) => {
           checked={layoutName === "concentric"}
           onChange={() => setLayoutName("concentric")}
         />
-        concentric
+        Concentric
       </label>
     </div>
   );

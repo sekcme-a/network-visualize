@@ -1,0 +1,17 @@
+.background_container{
+  background-color: #f7f6f2;
+  min-height: 100vh;
+}
+
+.cytoscape_container{
+  /* background-color: red; */
+  height: 100%;
+}
+
+.header{
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 50px;
+  border-bottom: 2px solid rgb(200,200,200);
+  width: 100vw;
+}

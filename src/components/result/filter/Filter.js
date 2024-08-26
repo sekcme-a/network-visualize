@@ -1,6 +1,7 @@
-import { Switch } from "@mui/material"
-import RangeSlider from "./filter/RangeSlider"
+import { Grid, Switch } from "@mui/material"
+import RangeSlider from "./RangeSlider"
 
+import styles from "./Filter.module.css"
 
 const columnName = [
   { "id": "combined_score", "text": "Combined Score", color:"rgb(128,0,128)" },
@@ -16,7 +17,7 @@ const columnName = [
 
 
 
-const FilterEdgeType = ({selectedEdgeType, setSelectedEdgeType, filterEdgeByScore, setFilterEdgeByScore}) => {
+const Filter = ({selectedEdgeType, setSelectedEdgeType, filterEdgeByScore, setFilterEdgeByScore}) => {
 
 
   const onClick = (id) => {
@@ -27,9 +28,9 @@ const FilterEdgeType = ({selectedEdgeType, setSelectedEdgeType, filterEdgeByScor
   }
 
   return(
-    <div style={{marginTop:"13px"}}>
-      <p>Interaction Filtering</p>
-      {
+    <div>
+      <h4 style={{marginBottom:"10px"}}>Interaction Filtering</h4>
+      {/* {
         columnName.map((item, index) => (
           <div key={index} style={{marginBottom:"50px"}}>
             <div style={{display:"flex", alignItems:"center", justifyContent:"space-between"}}>
@@ -49,9 +50,31 @@ const FilterEdgeType = ({selectedEdgeType, setSelectedEdgeType, filterEdgeByScor
             </div>
           </div>
         ))
-      }
+      } */}
+      <Grid container columnSpacing={4} rowSpacing={1}>
+        {
+          columnName.map((item, index) => (
+            <Grid item xs={6} key={index} >
+              <div className={styles.item}>
+                <div style={{display:"flex", alignItems:"center"}}>
+                  <Switch
+                    size="small" 
+                    type="radio" 
+                    value={item.id}
+                    checked={selectedEdgeType.includes(item.id)}
+                    onClick={()=>onClick(item.id)}
+                  />
+                  <div style={{marginLeft: "10px", width:"20px", height:"3px", backgroundColor: selectedEdgeType.includes(item.id) ? item.color : "#999"}}/>
+                  <p style={{marginLeft:"5px", fontSize:"12px", color: selectedEdgeType.includes(item.id) ? "black" : "#888"}}>{item.text}</p>
+                </div>
+                <RangeSlider id={item.id} {...{filterEdgeByScore, setFilterEdgeByScore}} disabled={!selectedEdgeType.includes(item.id)}/>
+              </div>
+            </Grid>
+          ))
+        }
+      </Grid>
     </div>
   )
 }
 
-export default FilterEdgeType
+export default Filter

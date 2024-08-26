@@ -1,25 +1,32 @@
-import React, { useEffect, useState, useRef } from 'react';
+"use client"
+
+import styles from "@/components/result/index.module.css"
+import React, { useEffect, useState, useRef, useContext } from 'react';
+import { MyContext } from "@/context/data";
 import { cytoscapeStyle } from '@/data/styles';
-import style from "./NetworkResult.module.css";
 import CytoscapeComponent from 'react-cytoscapejs';
 import cola from 'cytoscape-cola';
 import Cytoscape from 'cytoscape';
-import NodeInfo from './NodeInfo';
-import EdgeInfo from './EdgeInfo';
 import dagre from 'cytoscape-dagre';
 import coseBilkent from 'cytoscape-cose-bilkent';
-import LayoutSelector from './LayoutSelector';
-import SliderControl from './SliderControl';
-import FilterEdgeType from './FilterEdgeType';
 import { kmeans } from 'ml-kmeans';
-import Clustering from './filter/Clustering';
-import { TextField } from '@mui/material';
+import Header from "@/components/result/Header";
+import Menu from "@/components/result/Menu";
+import Input from "@/components/result/Input";
+import Select from "@/components/result/Select";
+import Layout from "@/components/result/layout/Layout";
+import Filter from "@/components/result/filter/Filter";
+import Clustering from "@/components/result/filter/Clustering";
+
+
 
 Cytoscape.use(cola);
 Cytoscape.use(dagre);
 Cytoscape.use(coseBilkent);
 
-const NetworkResult = ({ edges, nodes }) => {
+const Result = () => {
+  const {edges, nodes} = useContext(MyContext)
+
   const width = "100%";
   const height = "500px";
   const maxZoom = 2.5;
@@ -58,6 +65,8 @@ const NetworkResult = ({ edges, nodes }) => {
 
   const [cluster, setCluster] = useState("none")
   const [kCount, setKCount] = useState(3)
+
+  const [selectedMenu, setSelectedMenu] = useState("Input")
 
   const cyRef = useRef(null); // Reference to Cytoscape instance
 
@@ -138,116 +147,59 @@ const NetworkResult = ({ edges, nodes }) => {
     return colors[cluster % colors.length];
   };
 
-  return (
-    <div className={style.mainContainer}>
-      <div className={style.leftContainer}>
-        <div className={style.cytoscape__container}>
-          <CytoscapeComponent
-            elements={CytoscapeComponent.normalizeElements({ nodes: nodeList, edges: edgeList })}
-            style={{ width: width, height: height }}
-            stylesheet={[...cytoscapeStyle]}
-            maxZoom={maxZoom}
-            minZoom={minZoom}
-            autounselectify={false}
-            boxSelectionEnabled={true}
-            layout={layout}
-            cy={(cy) => {
-              cyRef.current = cy; // Store Cytoscape instance in ref
+  return(
+    <div className={styles.background_container}>
+      <Header />
 
-              cy.on('tap', 'node', function (evt) {
-                setSelectedType("node"); setSelectedId(evt.target.id());
-              });
-              cy.on('tap', 'edge', function (evt) {
-                setSelectedType("edge"); setSelectedId(evt.target.id());
-              });
 
-              // 중심성 측정
-              const degreeCentrality = cy.elements().degreeCentralityNormalized();
-              cy.nodes().forEach(node => {
-                const centrality = degreeCentrality.degree(node);
-                node.style('fontSize', 8);
-                node.style('width', centrality * 40 > 25 ? centrality * 40 : 25);
-                node.style('height', centrality * 40 > 25 ? centrality * 40 : 25);
-              });
-            }}
-          />
-        </div>
+      <div className={styles.cytoscape_container}>
+        <CytoscapeComponent
+          elements={CytoscapeComponent.normalizeElements({ nodes: nodeList, edges: edgeList })}
+          style={{ width: width, height: height }}
+          stylesheet={[...cytoscapeStyle]}
+          maxZoom={maxZoom}
+          minZoom={minZoom}
+          autounselectify={false}
+          boxSelectionEnabled={true}
+          layout={layout}
+          cy={(cy) => {
+            cyRef.current = cy; // Store Cytoscape instance in ref
+
+            cy.on('tap', 'node', function (evt) {
+              setSelectedType("node"); setSelectedId(evt.target.id());
+              setSelectedMenu("Select")
+            });
+            cy.on('tap', 'edge', function (evt) {
+              setSelectedType("edge"); setSelectedId(evt.target.id());
+              setSelectedMenu("Select")
+            });
+
+            // 중심성 측정
+            const degreeCentrality = cy.elements().degreeCentralityNormalized();
+            cy.nodes().forEach(node => {
+              const centrality = degreeCentrality.degree(node);
+              node.style('fontSize', 8);
+              node.style('width', centrality * 40 > 25 ? centrality * 40 : 25);
+              node.style('height', centrality * 40 > 25 ? centrality * 40 : 25);
+            });
+          }}
+        />
       </div>
-      <div className={style.rightContainer}>
-        {layoutName === "cola" &&
-          <SliderControl
-            edgeLength={edgeLength}
-            onEdgeLengthChange={onEdgeLengthChange}
-            nodeSpacing={nodeSpacing}
-            onNodeSpacingChange={onNodeSpacingChange}
-          />
-        }
-        <LayoutSelector layoutName={layoutName} setLayoutName={setLayoutName} />
-        <FilterEdgeType {...{ selectedEdgeType, setSelectedEdgeType, filterEdgeByScore, setFilterEdgeByScore }} />
 
+        
+      <Menu {...{selectedMenu, setSelectedMenu}}/>
       
-        {/* <button onClick={() => performKMeansClustering(3)}>Perform K-Means Clustering</button> */}
-        {/* <Clustering performKMeansClustering={performKMeansClustering} /> */}
-        <p>Clustering</p>
-
-        <div style={{display:"flex", alignItems:"center"}}>
-          <input
-            type="radio"
-            value="kmeans"
-            checked={cluster==="kmeans"}
-            onClick={()=>{
-              setCluster(prev => {
-                if(prev==="kmeans") return "none"
-                else {
-                  performKMeansClustering(parseInt(kCount))
-                  return "kmeans"
-                }
-              });
-            }}
-          />
-          k-means
-
-          <TextField
-            size="small"
-            sx={{ml: "10px"}}
-            value={kCount}
-            onChange={(e) => setKCount(e.target.value)}
-            label="Number of clusters"
-          />
-
+      <div style={{display:"flex", justifyContent:"center", width:"100%", paddingBottom:"50px"}}>
+        <div style={{width:"70%"}}>
+          {selectedMenu==="Input" && <Input />}
+          {selectedMenu==="Select" && <Select {...{selectedType, selectedId}} />}
+          {selectedMenu==="Layout" && <Layout {...{layoutName, setLayoutName, edgeLength, onEdgeLengthChange, nodeSpacing, onNodeSpacingChange}} />}
+          {selectedMenu==="Filter" && <Filter {...{ selectedEdgeType, setSelectedEdgeType, filterEdgeByScore, setFilterEdgeByScore }}  />}
+          {selectedMenu==="Cluster" && <Clustering {...{performKMeansClustering, cluster, setCluster}} />}
         </div>
-        <div style={{display:"flex", alignItems:"center", marginTop: "10px"}}>
-          <input
-            type="radio"
-            value="dbscan"
-            checked={cluster==="dbscan"}
-            onClick={()=>{
-              setCluster(prev => {
-                if(prev==="dbscan") return "none"
-                else {
-                  performKMeansClustering(parseInt(2))
-                  return "dbscan"
-                }
-              });
-            }}
-          />
-          dbscan
-
-          <TextField
-            size="small"
-            sx={{ml: "10px"}}
-            value={kCount}
-            onChange={(e) => setKCount(e.target.value)}
-            label="parameter"
-          />
-
-        </div>
-
       </div>
-      {selectedType === "node" && <NodeInfo id={selectedId} data={{ nodes, edges }} />}
-      {selectedType === "edge" && <EdgeInfo id={selectedId} data={{ nodes, edges }} />}
     </div>
-  );
+  )
 }
 
-export default React.memo(NetworkResult);
+export default Result
