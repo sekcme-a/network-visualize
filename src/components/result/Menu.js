@@ -18,7 +18,7 @@ const Menu = ({selectedMenu, setSelectedMenu}) => {
     {icon: <DragIndicatorOutlinedIcon style={{fontSize:"20px"}} />, text:"Layout"},
     {icon: <FilterAltOutlinedIcon style={{fontSize:"20px"}} />, text:"Filter"},
     {icon: <BubbleChartOutlinedIcon style={{fontSize:"20px"}} />, text:"Cluster"},
-    {icon: <FileDownloadOutlinedIcon style={{fontSize:"20px"}} />, text:"Export"},
+    // {icon: <FileDownloadOutlinedIcon style={{fontSize:"20px"}} />, text:"Export"},
   ]
   return(
     <div style={{display:"flex",justifyContent:"center", marginBottom: "20px"}}>

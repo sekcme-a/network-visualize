@@ -187,7 +187,7 @@ const Home = () => {
     console.log(edgeList)
     console.log(updatedNodesWithSize)
 
-    router.push("/visualizeresult")
+    router.push("/result")
   }
 
   const handleClick = () => {
