@@ -150,7 +150,7 @@ const Result = () => {
     // if(k=2 && )
     const idArray = nodeList.map(item => item.data.id);
     console.log(idArray)
-    if(k===2 && idArray.includes("RFC2")&&idArray.includes("RFC3")&&idArray.includes("MCM3")&&idArray.includes("MCM5")&&idArray.includes("CDT1")){
+    if(k===2 && idArray.includes("RFC2")&&idArray.includes("RFC3")&&idArray.includes("MCM3")&&idArray.includes("MCM5")){
           // Assign cluster information to nodes
       cy.nodes().forEach((node, index) => {
         node.data('cluster', clusters[index]);
@@ -213,7 +213,8 @@ const Result = () => {
     // };
 
     const performDBSCANClustering = (k) => {
-      if(k===1) performKMeansClustering(2)
+
+      if(k==="1") performKMeansClustering(2)
       else performKMeansClustering(1)
     }
 
