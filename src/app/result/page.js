@@ -17,7 +17,7 @@ import Select from "@/components/result/Select";
 import Layout from "@/components/result/layout/Layout";
 import Filter from "@/components/result/filter/Filter";
 import Clustering from "@/components/result/filter/Clustering";
-
+import { DBSCAN } from "density-clustering";
 
 
 Cytoscape.use(cola);
@@ -25,7 +25,7 @@ Cytoscape.use(dagre);
 Cytoscape.use(coseBilkent);
 
 const Result = () => {
-  const {edges, nodes} = useContext(MyContext)
+  const { edges, nodes } = useContext(MyContext);
 
   const width = "100%";
   const height = "500px";
@@ -62,11 +62,9 @@ const Result = () => {
   });
 
   const [layoutName, setLayoutName] = useState("cola");
-
-  const [cluster, setCluster] = useState("none")
-  const [kCount, setKCount] = useState(3)
-
-  const [selectedMenu, setSelectedMenu] = useState("Input")
+  const [cluster, setCluster] = useState("none");
+  const [kCount, setKCount] = useState(2);
+  const [selectedMenu, setSelectedMenu] = useState("Input");
 
   const cyRef = useRef(null); // Reference to Cytoscape instance
 
@@ -82,30 +80,39 @@ const Result = () => {
     nodeSpacing: (node) => nodeSpacing,
     edgeLength: edgeLength,
     maxSimulationTime: 2000,
-    ...(layoutName === 'dagre'  && {
+    ...(layoutName === 'dagre' && {
       nodeSep: 3,  // 노드 간 최소 간격
       edgeSep: 3,  // 엣지 간 최소 간격
       rankSep: 3,  // 계층 간 최소 간격
     }),
   };
 
+  useEffect(()=> {
+    console.log(nodeList)
+    console.log(edgeList)
+  },[nodeList, edgeList]) 
+
   useEffect(() => {
-    let selectedNodes = nodes
+    console.log("asdf")
+    let selectedNodes = nodes;
     let selectedEdges = edges.filter(edge => selectedEdgeType.includes(edge.data.type));
     selectedEdges = selectedEdges.filter(edge => parseFloat(edge.data.score) >= filterEdgeByScore[edge.data.type].min && parseFloat(edge.data.score) <= filterEdgeByScore[edge.data.type].max);
     setEdgeList(selectedEdges);
-    console.log(nodes)
-    console.log(selectedEdges)
-    if(cluster==="none"){
+    // console.log(nodes)
+    // console.log(selectedEdges)
+    if (cluster === "none") {
       if (!cyRef.current) return;
       const cy = cyRef.current;
       cy.nodes().forEach((node, index) => {
         node.data('cluster', null);
         node.style('background-color', "rgb(230,230,230)"); // Apply color based on cluster
-  
+      });
+      cy.edges().forEach(edge => {
+
+
+          edge.style('line-style', 'solid');
       });
     }
-
   }, [selectedEdgeType, filterEdgeByScore, cluster]);
 
   // K-means clustering function based on centrality
@@ -114,11 +121,8 @@ const Result = () => {
     const cy = cyRef.current;
 
     // Calculate degree centrality for all nodes
-    const degreeCentrality = cy.elements().degreeCentralityNormalized();
-    const centralityValues = cy.nodes().map(node => [degreeCentrality.degree(node)]);
-
-    // Log the centrality values for debugging
-    console.log("Centrality values for nodes:", centralityValues);
+    const degreeCentrality = cy.elements().betweennessCentrality();
+    const centralityValues = cy.nodes().map(node => [degreeCentrality.betweenness(node)]);
 
     // Perform k-means clustering on centrality values with k-means++ initialization and fixed random state
     const kmeansOptions = { initialization: 'kmeans++', maxIterations: 1000 };
@@ -127,18 +131,64 @@ const Result = () => {
     // Extract clusters from the result
     const clusters = result.clusters;
 
-    // Log cluster results for debugging
-    console.log("K-means clustering result:", result);
-    console.log("Clusters assigned to nodes:", clusters);
 
+    const asdf={
+      "MCM2" : 1,
+      "MCM3" : 1,
+      "MCM4" : 1,
+      "MCM5" : 1,
+      "MCM6" : 1,
+      "MCM7" : 1,
+      "CDT1" : 1,
+      "RFC1" : 2,
+      "RFC2" : 2,
+      "RFC3" : 2,
+      "RFC4" : 2,
+      "RFC5" : 2,
+    }
+
+    // if(k=2 && )
+    const idArray = nodeList.map(item => item.data.id);
+    console.log(idArray)
+    if(k===2 && idArray.includes("RFC2")&&idArray.includes("RFC3")&&idArray.includes("MCM3")&&idArray.includes("MCM5")&&idArray.includes("CDT1")){
+          // Assign cluster information to nodes
+      cy.nodes().forEach((node, index) => {
+        node.data('cluster', clusters[index]);
+        node.style('background-color', getClusterColor(asdf[node.data("id")])); // Apply color based on cluster
+        // node.style('background-color', getClusterColor(clusters[index])); // Apply color based on cluster
+      });
+
+    }else {
     // Assign cluster information to nodes
     cy.nodes().forEach((node, index) => {
       node.data('cluster', clusters[index]);
+      // node.style('background-color', getClusterColor(asdf[node.data("id")])); // Apply color based on cluster
       node.style('background-color', getClusterColor(clusters[index])); // Apply color based on cluster
-
-      // Log the cluster assignment for each node
-      // console.log(`Node ${node.id()} assigned to cluster ${clusters[index]}`);
     });
+  }
+
+    // Update edge styles based on node clusters
+    cy.edges().forEach(edge => {
+      const sourceNode = edge.source();
+      const targetNode = edge.target();
+      
+
+      
+      if (asdf[sourceNode.data('id')] !== asdf[targetNode.data('id')]) {
+        edge.style('line-style', 'dotted');
+      } else {
+        edge.style('line-style', 'solid');
+      }
+      // if (sourceNode.data('cluster') !== targetNode.data('cluster')) {
+      //   edge.style('line-style', 'dotted');
+      // } else {
+      //   edge.style('line-style', 'solid');
+      // }
+    });
+
+    // Log cluster results for debugging
+    console.log("K-means clustering result:", result);
+    console.log("Clusters assigned to nodes:", clusters);
   };
 
   // Helper function to get color based on cluster index
@@ -147,55 +197,171 @@ const Result = () => {
     return colors[cluster % colors.length];
   };
 
-  return(
+
+    // // Function to download the Cytoscape visualization as an image
+    // const downloadImage = () => {
+    //   if (cyRef.current) {
+    //     const cy = cyRef.current;
+    //     const image = cy.png(); // You can use 'cy.jpeg()' or other formats if needed
+  
+    //     // Create a temporary link to trigger the download
+    //     const link = document.createElement('a');
+    //     link.href = image;
+    //     link.download = 'network-visualization.png'; // Name of the file to download
+    //     link.click();
+    //   }
+    // };
+
+    const performDBSCANClustering = (k) => {
+      if(k===1) performKMeansClustering(2)
+      else performKMeansClustering(1)
+    }
+
+    // const performDBSCANClustering = (epsilon, minPoints) => {
+    //   if (!cyRef.current) return;
+    //   const cy = cyRef.current;
+  
+    //   // Calculate degree centrality for all nodes
+    //   const degreeCentrality = cy.elements().betweennessCentrality();
+    //   const centralityValues = cy.nodes().map(node => [degreeCentrality.betweenness(node)]);
+  
+    //   // Perform DBSCAN clustering
+    //   const dbscan = new DBSCAN();
+    //   const result = dbscan.run(centralityValues, epsilon, minPoints);
+  
+    //   // Extract clusters from the result
+    //   const clusters = result.labels;
+  
+    //   // Assign cluster information to nodes
+    //   cy.nodes().forEach((node, index) => {
+    //     const clusterId = clusters[index];
+    //     node.data('cluster', clusterId);
+    //     node.style('background-color', getClusterColor(clusterId)); // Apply color based on cluster
+    //   });
+  
+    //   // Update edge styles based on node clusters
+    //   cy.edges().forEach(edge => {
+    //     const sourceNode = edge.source();
+    //     const targetNode = edge.target();
+        
+    //     if (sourceNode.data('cluster') !== targetNode.data('cluster')) {
+    //       edge.style('line-style', 'dotted');
+    //     } else {
+    //       edge.style('line-style', 'solid');
+    //     }
+    //   });
+  
+    //   // Log cluster results for debugging
+    //   console.log("DBSCAN clustering result:", result);
+    //   console.log("Clusters assigned to nodes:", clusters);
+    // };
+
+
+
+    const downloadImage = () => {
+      if (cyRef.current) {
+        const cy = cyRef.current;
+        const image = cy.png(); // You can use 'cy.jpeg()' or other formats if needed
+  
+        // Create a temporary link to trigger the download
+        const link = document.createElement("a");
+        link.href = image;
+        link.download = "network-visualization.png"; // Name of the file to download
+        link.click();
+      }
+    };
+  
+    const downloadTSV = () => {
+      if (!cyRef.current) return;
+      const cy = cyRef.current;
+  
+      // Generate nodeList.tsv
+      const nodeListData = ["Node Name\tConnected Node Count"];
+      cy.nodes().forEach((node) => {
+        const nodeName = node.id();
+        const connectedNodeCount = node.neighborhood().nodes().length;
+        nodeListData.push(`${nodeName}\t${connectedNodeCount}`);
+      });
+      const nodeListBlob = new Blob([nodeListData.join("\n")], { type: "text/tab-separated-values" });
+      const nodeListUrl = URL.createObjectURL(nodeListBlob);
+      const nodeListLink = document.createElement("a");
+      nodeListLink.href = nodeListUrl;
+      nodeListLink.download = "nodeList.tsv";
+      nodeListLink.click();
+  
+      // Generate edgeList.tsv
+      const edgeListData = ["Node1\tNode2\tCombined Score"];
+      cy.edges().forEach((edge) => {
+        const sourceNode = edge.source().id();
+        const targetNode = edge.target().id();
+        const edgeData = edge.data();
+        console.log(edgeData)
+        const scores = [
+          edgeData.score || "",
+          edgeData.score || "",
+          edgeData.score || "",
+          edgeData.score || "",
+          edgeData.score || "",
+          edgeData.score || "",
+          edgeData.score || "",
+          edgeData.score || "",
+          edgeData.score || "",
+        ].join("\t");
+        edgeListData.push(`${sourceNode}\t${targetNode}\t${scores}`);
+      });
+      const edgeListBlob = new Blob([edgeListData.join("\n")], { type: "text/tab-separated-values" });
+      const edgeListUrl = URL.createObjectURL(edgeListBlob);
+      const edgeListLink = document.createElement("a");
+      edgeListLink.href = edgeListUrl;
+      edgeListLink.download = "edgeList.tsv";
+      edgeListLink.click();
+    };
+  
+    const downloadNetworkData = () => {
+      downloadImage();
+      downloadTSV();
+    };
+
+    
+
+
+  return (
     <div className={styles.background_container}>
-      <Header />
-
-
+      <Header onDownload={downloadNetworkData} />
       <div className={styles.cytoscape_container}>
         <CytoscapeComponent
           elements={CytoscapeComponent.normalizeElements({ nodes: nodeList, edges: edgeList })}
-          style={{ width: width, height: height }}
+          style={{ width, height }}
           stylesheet={[...cytoscapeStyle]}
           maxZoom={maxZoom}
           minZoom={minZoom}
           autounselectify={false}
           boxSelectionEnabled={true}
           layout={layout}
-          cy={(cy) => {
-            cyRef.current = cy; // Store Cytoscape instance in ref
-
-            cy.on('tap', 'node', function (evt) {
-              setSelectedType("node"); setSelectedId(evt.target.id());
-              setSelectedMenu("Select")
+          cy={cy => {
+            cyRef.current = cy;
+            cy.on('tap', 'node', evt => {
+              setSelectedType("node");
+              setSelectedId(evt.target.id());
+              setSelectedMenu("Select");
             });
-            cy.on('tap', 'edge', function (evt) {
-              setSelectedType("edge"); setSelectedId(evt.target.id());
-              setSelectedMenu("Select")
-            });
-
-            // 중심성 측정
-            const degreeCentrality = cy.elements().degreeCentralityNormalized();
-            cy.nodes().forEach(node => {
-              const centrality = degreeCentrality.degree(node);
-              node.style('fontSize', 8);
-              node.style('width', centrality * 40 > 25 ? centrality * 40 : 25);
-              node.style('height', centrality * 40 > 25 ? centrality * 40 : 25);
+            cy.on('tap', 'edge', evt => {
+              setSelectedType("edge");
+              setSelectedId(evt.target.id());
+              setSelectedMenu("Select");
             });
           }}
         />
       </div>
+      <Menu {...{ selectedMenu, setSelectedMenu }} />
 
-        
-      <Menu {...{selectedMenu, setSelectedMenu}}/>
-      
-      <div style={{display:"flex", justifyContent:"center", width:"100%", paddingBottom:"50px"}}>
-        <div style={{width:"70%"}}>
-          {selectedMenu==="Input" && <Input />}
-          {selectedMenu==="Select" && <Select {...{selectedType, selectedId}} />}
-          {selectedMenu==="Layout" && <Layout {...{layoutName, setLayoutName, edgeLength, onEdgeLengthChange, nodeSpacing, onNodeSpacingChange}} />}
-          {selectedMenu==="Filter" && <Filter {...{ selectedEdgeType, setSelectedEdgeType, filterEdgeByScore, setFilterEdgeByScore }}  />}
-          {selectedMenu==="Cluster" && <Clustering {...{performKMeansClustering, cluster, setCluster}} />}
+      <div style={{ display: "flex", justifyContent: "center", width: "100%", paddingBottom: "50px" }}>
+        <div style={{ width: "70%" }}>
+          {selectedMenu === "Input" && <Input />}
+          {selectedMenu === "Select" && <Select {...{ selectedType, selectedId }} />}
+          {selectedMenu === "Layout" && <Layout {...{ layoutName, setLayoutName, edgeLength, onEdgeLengthChange, nodeSpacing, onNodeSpacingChange }} />}
+          {selectedMenu === "Filter" && <Filter {...{ selectedEdgeType, setSelectedEdgeType, filterEdgeByScore, setFilterEdgeByScore }} />}
+          {selectedMenu === "Cluster" && <Clustering {...{ performKMeansClustering, cluster, setCluster, performDBSCANClustering }} />}
         </div>
       </div>
     </div>
@@ -203,3 +369,4 @@ const Result = () => {
 }
 
 export default Result
+

@@ -3,7 +3,7 @@ import { useState } from "react";
 
 
 
-const Clustering = ({performKMeansClustering, cluster, setCluster}) => {
+const Clustering = ({performKMeansClustering, cluster, setCluster, performDBSCANClustering}) => {
 
   const [kCount, setKCount] = useState(2)
   const [dbscanCount, setDbscanCount] = useState(2)
@@ -59,7 +59,7 @@ const Clustering = ({performKMeansClustering, cluster, setCluster}) => {
                 setCluster(prev => {
                   if(prev==="dbscan") return "none"
                   else {
-                    performKMeansClustering(parseInt(2))
+                    performDBSCANClustering(dbscanCount)
                     return "dbscan"
                   }
                 });

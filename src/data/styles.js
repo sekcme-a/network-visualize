@@ -120,61 +120,61 @@ export const cytoscapeStyle = [
   {
     selector: "edge[score = 1]",
     css: {
-      width: 1.8
+      width: 2.5
     }
   },
   {
     selector: "edge[score > 0.9][score < 1]",
     css: {
-      width: 1.5
+      width: 2.3
     }
   },
   {
     selector: "edge[score = 0.9]",
     css: {
-      width: 1.5
+      width: 2,
     }
   },
   {
     selector: "edge[score > 0.8][score < 0.9]",
     css: {
-      width: 1.35
+      width: 2
     }
   },
   {
-    selector: "edge[score = 0.9]",
+    selector: "edge[score = 0.8]",
     css: {
-      width: 1.35
+      width: 1.7
     }
   },
   {
     selector: "edge[score > 0.7][score < 0.8]",
     css: {
-      width: 1.2
+      width: 1.7
     }
   },
   {
     selector: "edge[score = 0.7]",
     css: {
-      width: 1.2
+      width: 1.5
     }
   },
   {
     selector: "edge[score > 0.6][score < 0.7]",
     css: {
-      width: 1.1
+      width: 1.5
     }
   },
   {
     selector: "edge[score = 0.6]",
     css: {
-      width: 1.1
+      width: 1.3
     }
   },
   {
     selector: "edge[score > 0.5][score < 0.6]",
     css: {
-      width: 1.0
+      width: 1.3
     }
   },
   {
